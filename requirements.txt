@@ -1,0 +1,6 @@
+cmake
+numpy
+dlib
+scipy
+opencv-python
+appdirs
