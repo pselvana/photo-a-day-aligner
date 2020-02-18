@@ -122,7 +122,7 @@ def get_ims_and_landmarks(images, landmark_finder):
 
 
 def align_images(input_files, out_path, out_extension, landmark_finder,
-                 img_thresh=0.0):
+                 img_thresh=0.0, correct_color=true):
     """
     Align a set of images of a person's face.
 
@@ -148,6 +148,10 @@ def align_images(input_files, out_path, out_extension, landmark_finder,
 
         Images with an with this distance of the previous image (using the L2
         norm) are considered duplicates and are ignored.
+
+    :param correct_color:
+
+        Boolean controlling whether or not to warp the image color space to match.
 
     """
     ref_landmarks = None
@@ -182,9 +186,12 @@ def align_images(input_files, out_path, out_extension, landmark_finder,
             ref_color = color
         M = orthogonal_procrustes(ref_landmarks, lms)
         warped = warp_im(im, M, im.shape)
-        warped_corrected = warped * ref_color / color
+        image = warped
+        if correct_color:
+            logger.debug("Aligning color")
+            image = warped * ref_color / color
         out_fname = os.path.join(out_path,
                                  "{:08d}.{}".format(idx, out_extension))
-        cv2.imwrite(out_fname, warped_corrected)
+        cv2.imwrite(out_fname, image)
         logger.debug("Wrote file %s", out_fname)
 

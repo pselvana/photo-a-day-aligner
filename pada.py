@@ -145,7 +145,8 @@ if __name__ == "__main__":
             out_path=cfg['aligned_path'],
             out_extension=cfg['aligned_extension'],
             landmark_finder=landmark_finder,
-            img_thresh=cfg['img_thresh'])
+            img_thresh=cfg['img_thresh'],
+            correct_color=cfg['correct_color'])
     elif cli_args.cmd == "framedrop":
         input_files_glob = os.path.join(
                                        cfg['aligned_path'],
